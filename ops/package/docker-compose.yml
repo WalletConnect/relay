@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  relay:
+    image: walletconnect/relay:${TAG:-dev}
+    build:
+      context: ../../
+      dockerfile: Dockerfile

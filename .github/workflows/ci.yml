@@ -4,14 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'src/**'
-      - 'ops/**'
-      - 'test/**'
-      - '.prettierrc'
-      - '*.json'
-      - 'Makefile'
-      - 'Dockerfile*'
+    tags:
+      - "v*"
 
 concurrency: ${{ github.workflow }}
 

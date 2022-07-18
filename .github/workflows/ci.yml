@@ -1,0 +1,52 @@
+name: ci
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'ops/**'
+      - 'test/**'
+      - '.prettierrc'
+      - '*.json'
+      - 'Makefile'
+      - 'Dockerfile*'
+
+concurrency: ${{ github.workflow }}
+
+env:
+  TERM: linux
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - id: run-tests
+        uses: ./.github/actions/tests
+        with:
+          dockerhub-user: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
+  push:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: create latest tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          export TAG=latest
+          make build
+
+      - name: Set env
+        run: |
+          echo "TAG=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Build and publish
+        run: |
+          make build
+          make publish

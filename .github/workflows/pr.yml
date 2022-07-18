@@ -1,0 +1,42 @@
+name: pr
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'ops/**'
+      - 'test/**'
+      - '.prettierrc'
+      - '*.json'
+      - 'Makefile'
+      - 'Dockerfile*'
+
+env:
+  TERM: linux
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install npm dev deps
+        run: npm i --only=dev
+      - name: Eslint
+        run: npx eslint -c '.eslintrc' './src/**/*.ts'
+      - name: Prettier
+        run: npx prettier --config .prettierrc -c './src/**/*.ts'
+      - id: run-tests
+        uses: ./.github/actions/tests
+        with:
+          dockerhub-user: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}

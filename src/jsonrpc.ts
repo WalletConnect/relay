@@ -44,7 +44,9 @@ export class JsonRpcService {
     try {
       this.logger.debug(`Incoming JSON-RPC Payload`);
       this.logger.debug({ type: "payload", direction: "incoming", payload: request, socketId });
+
       switch (request.method) {
+        case RELAY_JSONRPC.irn.publish:
         case RELAY_JSONRPC.waku.publish:
         case RELAY_JSONRPC.iridium.publish:
           await this.onPublishRequest(
@@ -52,6 +54,7 @@ export class JsonRpcService {
             request as JsonRpcRequest<RelayJsonRpc.PublishParams>,
           );
           break;
+        case RELAY_JSONRPC.irn.subscribe:
         case RELAY_JSONRPC.waku.subscribe:
         case RELAY_JSONRPC.iridium.subscribe:
           await this.onSubscribeRequest(
@@ -59,6 +62,7 @@ export class JsonRpcService {
             request as JsonRpcRequest<RelayJsonRpc.SubscribeParams>,
           );
           break;
+        case RELAY_JSONRPC.irn.unsubscribe:
         case RELAY_JSONRPC.waku.unsubscribe:
         case RELAY_JSONRPC.iridium.unsubscribe:
           await this.onUnsubscribeRequest(
@@ -132,7 +136,7 @@ export class JsonRpcService {
     const jsonrpcMethod =
       request.method === RELAY_JSONRPC.iridium.subscribe
         ? RELAY_JSONRPC.iridium.subscription.toString()
-        : RELAY_JSONRPC.waku.subscription.toString();
+        : (request.method === RELAY_JSONRPC.waku.subscribe ? RELAY_JSONRPC.waku.subscription.toString() : RELAY_JSONRPC.irn.subscription.toString());
 
     const id = this.server.subscription.set({
       topic: params.topic,

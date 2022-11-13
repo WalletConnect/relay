@@ -1,3 +1,5 @@
+>This repo supported the initial alpha launch of WalletConnect v2 and is a sample implementation of the WalletConnect v2 protocol.  We __do not recommend__ its use and recommend to wait for the new open source version which we are actively working on. Self-hosted currently isn’t supported and we just closed a new funding round to support a decentralized network which will then support self-host again.
+
 # WalletConnect Relay
 
 This repository contains the minimal relay server for [WalletConnect v2.0](https://github.com/WalletConnect/walletconnect-monorepo).

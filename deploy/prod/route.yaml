@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: walletconnect-relay
+  namespace: crossbell
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: "Host(`$DOMAIN_1`) || Host(`$DOMAIN_2`)"
+      services:
+        - name: walletconnect-relay
+          port: 5000

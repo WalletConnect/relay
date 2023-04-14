@@ -2,7 +2,7 @@
 >
 > We __do not recommend__ its use and recommend to wait for the new open source version which we are actively working on. 
 > 
-> __Self-hosting is currently not supported__ and WalletConnect will not provide support for implementations relying on self-hosting until announced otherwise. We recently closed a new funding round to support a decentralized network which will in turn support self-hosting again.
+> __Self-hosting is currently not supported__ and WalletConnect will not provide support for implementations relying on self-hosting until announced otherwise.
 
 # WalletConnect Relay
 
